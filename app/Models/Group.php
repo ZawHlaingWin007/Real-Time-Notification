@@ -15,6 +15,11 @@ class Group extends Model
         'code'
     ];
 
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+
     public function users()
     {
         return $this->belongsToMany(User::class);

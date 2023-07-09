@@ -26,4 +26,7 @@ Route::post('/send-notification', [NotificationController::class, 'sendNotificat
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::get('/join-group/{group}', [GroupController::class, 'joinGroup'])->name('groups.joinGroup');
+Route::get('/leave-group/{group}', [GroupController::class, 'leaveGroup'])->name('groups.leaveGroup');
 Route::resource('groups', GroupController::class);

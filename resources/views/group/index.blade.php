@@ -3,7 +3,7 @@
 @section('content')
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-8">
+            <div class="col-md-10">
                 <div class="card">
                     <div class="card-header">{{ __('Groups') }}</div>
 
@@ -36,9 +36,9 @@
                                                 </ul>
                                                 <div class="d-flex justify-content-between">
                                                     @can('join-group', $group)
-                                                        <a href="#" class="btn btn-sm btn-primary">Join Group</a>
+                                                        <a href="{{ route('groups.joinGroup', $group) }}" class="btn btn-sm btn-primary">Join Group</a>
                                                     @else
-                                                        <a href="#" class="btn btn-sm btn-danger">Leave</a>
+                                                        <a href="{{ route('groups.leaveGroup', $group) }}" class="btn btn-sm btn-danger">Leave Group</a>
                                                     @endcan
                                                 </div>
                                             </div>
