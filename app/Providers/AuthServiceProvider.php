@@ -30,5 +30,9 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('join-group', function (User $user, Group $group) {
             return !$user->groups()->where('group_id', $group->id)->exists();
         });
+
+        Gate::define('access-group', function (User $user, Group $group) {
+            return $user->groups->contains('id', $group->id);
+        });
     }
 }

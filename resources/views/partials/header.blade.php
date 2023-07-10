@@ -36,20 +36,27 @@
                         <a id="notification-dropdown" class="nav-link dropdown-toggle" href="#" role="button"
                             data-bs-toggle="dropdown">
                             Notifications
-                            <span class="badge bg-danger">9</span>
+                            <span class="badge bg-danger" id="notification-count">0</span>
                         </a>
 
                         <div class="dropdown-menu dropdown-menu-end px-2 notification-dropdown"
                             aria-labelledby="notification-dropdown">
-                            <p class="dropdown-item mb-1 alert alert-primary">
-                                Student Mg Mg Joined Green Group.
-                            </p>
-                            <p class="dropdown-item mb-1 alert alert-primary">
-                                Student Hla Hla Joined Red Group.
-                            </p>
-                            <p class="dropdown-item mb-1 alert alert-primary">
-                                Student Zaw Zaw Left from Red Group.
-                            </p>
+                            @php
+                                $notifications = session()->get('notifications') ?? [];
+                                $localStorageNotifications = json_decode($localStorageNotifications ?? '[]');
+                                $allNotifications = array_merge($notifications, $localStorageNotifications);
+                            @endphp
+                            @if (!empty($allNotifications))
+                                @foreach ($allNotifications as $notification)
+                                    <p class="dropdown-item mb-1 alert alert-primary">
+                                        {{ $notification }}
+                                    </p>
+                                @endforeach
+                            @else
+                                <p class="dropdown-item mb-1 alert alert-primary">
+                                    No notifications.
+                                </p>
+                            @endif
                         </div>
                     </li>
                     <li class="nav-item dropdown">

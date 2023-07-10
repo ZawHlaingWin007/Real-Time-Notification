@@ -2,8 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\GroupJoined;
+use App\Events\GroupJoinedNotificationEvent;
+use App\Events\GroupMembershipChanged;
+use App\Events\GroupNotification;
 use App\Models\Group;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Session;
 
 class GroupController extends Controller
 {
@@ -18,6 +24,13 @@ class GroupController extends Controller
     {
         $user = auth()->user();
         $user->groups()->attach($group->id);
+
+        // Trigger the group notification event
+        $user = auth()->user(); // Assuming you have a logged-in user
+        Event::dispatch(new GroupNotification($user, 'New member joined the group!'));
+
+        // GroupMembershipChanged::dispatch($group);
+        broadcast(new GroupJoinedNotificationEvent($group, $user));
 
         return back()->with('success', "You joined $group->name successfully.");
     }

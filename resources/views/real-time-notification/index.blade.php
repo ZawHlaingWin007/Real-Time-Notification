@@ -69,7 +69,7 @@
                 // Handle "Mark as Read" button click
                 notification.on('click', '.mark-as-read', function() {
                     var notificationId = $(this).closest('.notification').data('notification-id');
-                    $(this).closest('.notification').remove();
+                    $(this).closest('.notification').fadeOut();
                     // Send an AJAX request to mark the notification as read on the server
                     // using the notificationId
                     // Example:

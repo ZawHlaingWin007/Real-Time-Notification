@@ -3,6 +3,7 @@
 namespace App\Events;
 
 use App\Models\Group;
+use App\Models\User;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -11,15 +12,17 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class GroupMembershipChanged implements ShouldBroadcast
+class GroupJoined implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $group;
+    public $user;
 
-    public function __construct(Group $group)
+    public function __construct(Group $group, User $user)
     {
         $this->group = $group;
+        $this->user = $user;
     }
 
     /**
@@ -29,7 +32,18 @@ class GroupMembershipChanged implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        // return new PrivateChannel('channel-name');
-        return new PrivateChannel('groups.'. $this->group->id);
+        return new PrivateChannel('group.'.$this->group->id);
+    }
+
+    /**
+     * Get the data to broadcast.
+     *
+     * @return array
+     */
+    public function broadcastWith()
+    {
+        return [
+            'message' => "{$this->user->name} has joined the group, {$this->group->name}.",
+        ];
     }
 }

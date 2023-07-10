@@ -19,10 +19,18 @@ class DatabaseSeeder extends Seeder
         User::factory(10)->create();
         Group::factory(5)->create();
 
-        for ($i=0; $i < 10; $i++) { 
+        // Get all group and user IDs
+        $groupIds = Group::pluck('id')->toArray();
+        $userIds = User::pluck('id')->toArray();
+
+        // Shuffle the arrays to generate random pairs
+        shuffle($groupIds);
+        shuffle($userIds);
+
+        for ($i = 0; $i < 10; $i++) {
             GroupUser::create([
-                'group_id' => rand(1, 5),
-                'user_id' => rand(1, 10),
+                'group_id' => $groupIds[$i % 5], // Modulus 5 to ensure group_id is within range
+                'user_id' => $userIds[$i % 10], // Modulus 10 to ensure user_id is within range
                 'joined_date' => now(),
             ]);
         }
