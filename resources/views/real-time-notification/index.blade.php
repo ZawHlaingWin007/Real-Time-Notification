@@ -33,7 +33,6 @@
     <script src="{{ mix('js/app.js') }}"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    {{-- <script src="https://js.pusher.com/7.0/pusher.min.js"></script> --}}
     <script>
         $.ajaxSetup({
             headers: {
@@ -43,8 +42,9 @@
 
         // Listen for new notifications
         Echo.channel('notifications')
-            .listen('StudentJoinedGroupNotificationEvent', (e) => {
+            .listen('.send-noti', (e) => {
                 // Create notification element
+                console.log("Wop This is not need to referesh")
                 var notification = $('<div>')
                     .addClass('notification alert alert-info')
                     .attr('data-notification-id', e.notification.id)
@@ -70,22 +70,6 @@
                 notification.on('click', '.mark-as-read', function() {
                     var notificationId = $(this).closest('.notification').data('notification-id');
                     $(this).closest('.notification').fadeOut();
-                    // Send an AJAX request to mark the notification as read on the server
-                    // using the notificationId
-                    // Example:
-                    // $.ajax({
-                    //     url: '/mark-notification-as-read',
-                    //     method: 'POST',
-                    //     data: {
-                    //         notificationId: notificationId
-                    //     },
-                    //     success: function(response) {
-                    //         console.log(response);
-                    //     },
-                    //     error: function(xhr, status, error) {
-                    //         console.error(error);
-                    //     }
-                    // });
                 });
             });
 

@@ -66,8 +66,7 @@
         $(document).on('click', '#joinGroupButton', function(e) {
             // e.preventDefault();
             let groupId = $(this).data('group-id');
-            console.log(groupId)
-            Echo.private('group.' + groupId)
+            Echo.private(`group.${groupId}`)
                 .listen('.group-notification', (event) => {
                     console.log(event);
                     alert(event.message);

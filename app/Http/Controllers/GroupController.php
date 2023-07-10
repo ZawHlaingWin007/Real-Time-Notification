@@ -26,9 +26,7 @@ class GroupController extends Controller
         $user->groups()->attach($group->id);
 
         // Trigger the group notification event
-        $user = auth()->user(); // Assuming you have a logged-in user
-        Event::dispatch(new GroupNotification($user, 'New member joined the group!'));
-
+        // Event::dispatch(new GroupNotification($user, 'New member joined the group!'));
         // GroupMembershipChanged::dispatch($group);
         broadcast(new GroupJoinedNotificationEvent($group, $user));
 

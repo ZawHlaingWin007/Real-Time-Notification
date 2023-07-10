@@ -31,4 +31,17 @@ class StudentJoinedGroupNotificationEvent implements ShouldBroadcast
         // return new PrivateChannel('channel-name');
         return new Channel('notifications');
     }
+
+    public function broadcastAs()
+    {
+        return "send-noti";
+    }
+
+    public function broadcastWith()
+    {
+        return [
+            "notification" => $this->notification,
+            "alert" => "This alert will be with data"
+        ];
+    }
 }
