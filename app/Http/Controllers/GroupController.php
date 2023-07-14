@@ -2,14 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\GroupJoined;
-use App\Events\GroupJoinedNotificationEvent;
-use App\Events\GroupMembershipChanged;
-use App\Events\GroupNotification;
+use App\Events\UserJoinedGroup;
 use App\Models\Group;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\Session;
 
 class GroupController extends Controller
 {
@@ -19,16 +13,29 @@ class GroupController extends Controller
         return view('group.index', compact('groups'));
     }
 
+    public function show(Group $group)
+    {
+        return view('group.show', compact('group'));
+    }
+
+    public function allGroups()
+    {
+        $groups = Group::with('users')->latest()->get();
+        return response()->json([
+            'groups' => $groups
+        ]);
+    }
+
     // When user join to another group
     public function joinGroup(Group $group)
     {
         $user = auth()->user();
         $user->groups()->attach($group->id);
 
-        // Trigger the group notification event
-        // Event::dispatch(new GroupNotification($user, 'New member joined the group!'));
+        // Event::dispatch(new GroupJoined($group, $user));
         // GroupMembershipChanged::dispatch($group);
-        broadcast(new GroupJoinedNotificationEvent($group, $user));
+
+        broadcast(new UserJoinedGroup($user, $group))->toOthers();
 
         return back()->with('success', "You joined $group->name successfully.");
     }
