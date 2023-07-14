@@ -2,6 +2,8 @@
 
 namespace App\Events;
 
+use App\Models\Group;
+use App\Models\User;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -10,17 +12,17 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class GroupJoinedNotificationEvent implements ShouldBroadcast
+class UserJoinedGroup implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $group;
     public $user;
+    public $group;
 
-    public function __construct($group, $user)
+    public function __construct(User $user, Group $group)
     {
-        $this->group = $group;
         $this->user = $user;
+        $this->group = $group;
     }
 
     /**
@@ -30,26 +32,16 @@ class GroupJoinedNotificationEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('group.'.$this->group->id);
+        return new PresenceChannel('group.' . $this->group->id);
     }
 
-    /**
-     * Exclude the joined user from the broadcasting.
-     *
-     * @return \Illuminate\Broadcasting\Channel|\Illuminate\Broadcasting\Channel[]
-     */
     public function broadcastWith()
     {
         return [
-            'message' => "{$this->user->name} has joined the group {$this->group->name}.",
+            'message' => "{$this->user->name} joined the group, {$this->group->name}.",
         ];
     }
 
-    /**
-     * The event's broadcast name.
-     *
-     * @return string
-     */
     public function broadcastAs()
     {
         return 'group-notification';

@@ -29,4 +29,6 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::get('/join-group/{group}', [GroupController::class, 'joinGroup'])->name('groups.joinGroup');
 Route::get('/leave-group/{group}', [GroupController::class, 'leaveGroup'])->name('groups.leaveGroup');
+
+Route::get('/all-groups', [GroupController::class, 'allGroups'])->name('groups.allGroups');
 Route::resource('groups', GroupController::class);
